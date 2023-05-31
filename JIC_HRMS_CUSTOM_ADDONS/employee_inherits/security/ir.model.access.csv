@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_attendance_import,attendance.import,model_attendance_import,base.group_user,1,1,1,0
+access_employee_leave_creation,employee.leave.creation,model_employee_leave_creation,base.group_user,1,1,1,1
+access_project_project_rbac_admin,project.project,project.model_project_project,employee_inherits.employee_project_admin,1,1,1,1

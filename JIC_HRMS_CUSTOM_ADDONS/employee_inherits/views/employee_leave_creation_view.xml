@@ -1,0 +1,52 @@
+<odoo>
+  <data>
+      <record id="view_employee_leave_creation_tree" model="ir.ui.view">
+        <field name="name">employee.leave.creation.tree</field>
+        <field name="model">employee.leave.creation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_ids" widget="many2many_tags"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_leave_creation_form" model="ir.ui.view">
+        <field name="name">employee.leave.creation.form</field>
+        <field name="model">employee.leave.creation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <button string="Leave Creation" name="leave_creation" type="object" class="oe_highlight" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="actions_employee_leave_creation" model="ir.actions.act_window">
+        <field name="name">Attendance Leave Creation</field>
+        <field name="res_model">employee.leave.creation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to create a new Attendance Leave Creation.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_employee_leave_creation"
+              name="Attendance Leave Creation"
+              sequence="560"
+              parent="hr_payroll_community.menu_hr_payroll_community_configuration"
+              action="actions_employee_leave_creation"/>
+  </data>
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_attendance_new_report_wizard,hr.attendance.report.new.wizard,model_hr_attendance_report_wizard,hr_attendance.group_hr_attendance_user,1,1,1,0
+access_hr_attendance_new_report_wizard_user,hr.attendance.report.new.user.wizard,model_hr_attendance_report_wizard,base.group_user,1,1,1,0
+,,,,,,,
+access_attendance_regular,request_regular,model_attendance_regular,base.group_user,1,1,1,0
+access_attendance_regular_categories,request_regular_categories,model_reg_categories,base.group_user,1,0,0,0
+access_attendance_categories_admin,request_categories_admin,model_reg_categories,hr_attendance.group_hr_attendance_manager,1,1,1,1
+,,,,,,,
+access_admin_allowed_ips,allowed_ips_attendance,model_allowed_ips,base.group_erp_manager,1,1,1,1
+access_user_allowed_ips,allowed_ips_attendance_user,model_allowed_ips,base.group_user,1,0,0,0

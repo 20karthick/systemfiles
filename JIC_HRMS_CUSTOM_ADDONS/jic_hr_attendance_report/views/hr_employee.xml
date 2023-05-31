@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--  Form view  -->
+    <record id="hr_employee_attendance_form" model="ir.ui.view">
+        <field name="name">Employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group>
+                    <group>
+                        <field name="attendance_report_range"/>
+                    </group>
+                    <group>
+                        <button name="button_attendance_report" icon="fa-download" string="Attendance Report" type="object"/>
+                        <button name="send_attendance_report_xlsx_mail_to_employee" string="Email" type="object"/>
+                    </group>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

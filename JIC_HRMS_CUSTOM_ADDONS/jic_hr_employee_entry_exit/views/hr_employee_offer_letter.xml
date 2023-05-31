@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_offer_letter_document">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)" />
+                <div class="page" style="font-size: 14px;">
+                    <h2>
+                        <span>Offer Letter</span>
+                    </h2>
+                    <span>Date: <t t-esc="datetime.date.today().strftime('%d %B, %Y')"/></span>
+                    <p></p>
+                    <br></br>
+                    <p></p>
+                    <div>
+                        <p>Dear <b><span t-field="o.partner_name"/></b></p>
+                        <p>
+                            We are delighted to offer you the position of <span t-field="o.job_id.name"/> in
+                            <strong><span t-field="o.company_id.name"/></strong>. In this important and responsible position,
+                            you will report to
+                            <t t-if="o.parent_id.gender=='female'">Mrs.</t><t t-else="">Mr.</t>
+                            <span t-field="o.parent_id.name"/> (<span t-field="o.parent_id.job_title"/>).
+                            Your joining date is on <span t-esc="o.availability and o.availability.strftime('%d %B, %Y') or '----------'"/>.
+                        </p>
+                        <p>
+                            Your Package include the following,
+                        </p>
+                        <p>
+                            <ol>
+                                <li style="text-align:justify">Monthly Basic Salary of  <b><t t-esc="o.salary_proposed" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></b>
+                                    (<span t-esc="o.company_id.currency_id.amount_to_text(o.salary_proposed)"/> only),
+                                    which is all-inclusive from the Company.
+                                </li>
+                                <li style="text-align:justify">
+                                    You are subject to a Probation period required
+                                <t t-esc="o._convert_number_to_words(o.probation_period)"/>
+                                (<span t-field="o.probation_period"/>)
+                                calendar days from the
+                                date of joining, and upon successful confirmation, you will continue the service
+                                    with our Company and would be eligible for any other benefits from the Company.
+                                </li>
+                                <li style="text-align:justify">
+                                    You will be on a Full-time shift, six days a week, 9 hrs as per standard working hours
+                                    which is inclusive of a one-hour lunch break.
+                                </li>
+                                <li style="text-align:justify">Annual/Vacation leaves, Sick leave, and End of service (Indemnity) benefits are as
+                                    per Kuwait Labour Law along with Company policy.
+                                </li>
+                            </ol>
+                        </p>
+                        <p>
+                            You agree that the Employer’s policies and rules, as amended or replaced from time to time,
+                            shall be binding upon you but shall not form part of the offer letter.
+                        </p>
+                        <p>
+                            <t t-esc="o.company_id.section_1"/>
+                        </p>
+                        <p>
+                            During your probation period, either party may terminate this agreement by providing written
+                            notice of one week (or payment in lieu of notice) to the other party. The Employer may
+                            terminate this agreement with/without notice where you have committed an act of wilful
+                            or serious misconduct or are significantly neglectful of your duties or you are in breach
+                            of this agreement. You are required to send the daily activities report to your reporting
+                            manager without fail every day. Failure to do so will be considered as dereliction of duties
+                            and may result in pay deduction.
+                        </p>
+                        <p>
+                            <t t-esc="o.company_id.section_2"/>
+                        </p>
+                        <p>
+                            This letter of offer contains the proposed Terms and Conditions of your employment with the
+                            Employer and is considered as a formal contract of Employment.
+                        </p>
+                        <p>
+                            <t t-esc="o.company_id.section_3"/>
+                        </p>
+                        <p>
+                            We look forward to you, joining us for a successful association working together.
+                            In order to signify your acceptance, please sign below and return it to us by
+                            <t t-esc="o.sign_and_return_date and o.sign_and_return_date.strftime('%d %B, %Y') or '--------'"/>
+                            with the signed copy of this offer letter.
+                        </p>
+                        <p>
+                            <t t-esc="o.company_id.section_4"/>
+                        </p>
+                        <p>Sincerely,</p>
+                        <br></br>
+                        <b><span t-field="o.signed_by.name"/></b><br/>
+                        <b><span t-field="o.signed_by.job_title"/></b>
+                        <hr/>
+                        <strong>I agree to the terms and accept this offer of employment. </strong>
+                        <p></p>
+                        <div class="row">
+                            <div class="col-6" style="oe_inline">
+                                Name: <hr></hr>
+                            </div>
+                            <div class="col-6" style="oe_inline">
+                                Signature: <hr></hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="report_employee_offer_letter">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.user_id.partner_id.lang"/>
+                    <t t-call="jic_hr_employee_entry_exit.report_offer_letter_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_hr_employee_offer_letter" model="ir.actions.report">
+            <field name="name">Offer Letter</field>
+            <field name="model">hr.applicant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">jic_hr_employee_entry_exit.report_employee_offer_letter</field>
+            <field name="report_file">jic_hr_employee_entry_exit.report_employee_offer_letter</field>
+            <field name="print_report_name">(object._get_report_base_filename_recruitment())</field>
+            <field name="attachment">(object._get_report_base_filename_recruitment()+'.pdf')</field>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

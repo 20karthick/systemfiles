@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- To add weekday field to project task form view  -->
+        <record id="view_project_task_tree_inherit_timesheet" model="ir.ui.view">
+            <field name="name">project.task.inherit.timesheet.lines</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='timesheet_ids']/tree/field[@name='date']" position="after">
+                        <field name="weekday" optional="show"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        <record id="view_project_task_form_inherit" model="ir.ui.view">
+            <field name="name">project.task.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+             <field name="groups_id" eval="[(6, 0, [ref('employee_inherits.employee_project_admin')])]"/>
+            <field name="arch" type="xml">
+                <field name="user_ids" position="attributes">
+                    <attribute name="domain">['|',('share', '=', False), ('active', '=', True), ('company_id', '=', company_id)]</attribute>
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="domain">[('is_company', '=', 'company')]</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- Kanban -->
+<!--        <record id="view_project_task_kanban_inherit_timesheet" model="ir.ui.view">-->
+<!--            <field name="name">project.task.inherit.kanban.lines</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_task_kanban"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <data>-->
+<!--                    <xpath expr="//kanban[@js_class='project_task_kanban']" position="attributes">-->
+<!--                        <attribute name="create">false</attribute>-->
+<!--                    </xpath>-->
+<!--                </data>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!-- Tree -->
+<!--        <record id="view_project_task_tree_inherit_timesheet" model="ir.ui.view">-->
+<!--            <field name="name">project.task.inherit.tree.lines</field>-->
+<!--            <field name="model">project.task</field>-->
+<!--            <field name="inherit_id" ref="project.view_task_tree2"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <data>-->
+<!--                    <xpath expr="//tree[@js_class='project_list']" position="attributes">-->
+<!--                        <attribute name="create">false</attribute>-->
+<!--                    </xpath>-->
+<!--                </data>-->
+<!--            </field>-->
+<!--        </record>-->
+
+    </data>
+</odoo>

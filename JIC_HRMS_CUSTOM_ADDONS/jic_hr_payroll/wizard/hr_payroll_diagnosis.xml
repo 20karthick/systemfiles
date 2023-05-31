@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_hr_payroll_diagnosis" model="ir.ui.view">
+            <field name="name">hr.payroll.diagnosis.view</field>
+            <field name="model">hr.payroll.diagnosis</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Diagnosis" create="false">
+                    <header>
+                        <button icon="fa-cogs" string="Diagnosis" name="do_diagnosis" type="object" class="oe_highlight"  />
+                    </header>
+                    <group>
+                        <span colspan="4" nolabel="1">This wizard will generate diagnosis report for the period selected.</span>
+                    </group>
+                    <group col="4" >
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_hr_payslip_by_employees" model="ir.actions.act_window">
+            <field name="name">Payroll Diagnosis</field>
+            <field name="res_model">hr.payroll.diagnosis</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_payroll_diagnosis"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Payroll Diagnosis"
+                id="menu_hr_payroll_diagnosis"
+                parent="hr_payroll_community.menu_hr_payroll_community_configuration"
+                action="action_hr_payslip_by_employees"
+                sequence="550"
+                groups="hr.group_hr_user"/>
+
+</odoo>

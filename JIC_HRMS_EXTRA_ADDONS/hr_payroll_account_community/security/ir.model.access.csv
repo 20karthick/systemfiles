@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_journal_user,account.journal.user,account.model_account_journal,hr_payroll_community.group_hr_payroll_community_user,1,1,1,1
+access_account_move_user,account.move.hr.expense.approver,account.model_account_move,hr_payroll_community.group_hr_payroll_community_user,1,0,0,0
+access_account_move_line_user,account.move.line.hr.expense.approver,account.model_account_move_line,hr_payroll_community.group_hr_payroll_community_user,1,0,0,0
+access_account_analytic_line_user,account.analytic.line.user,account.model_account_analytic_line,hr_payroll_community.group_hr_payroll_community_user,1,1,1,1

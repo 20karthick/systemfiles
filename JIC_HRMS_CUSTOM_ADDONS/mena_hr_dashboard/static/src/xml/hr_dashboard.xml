@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<template xml:space="preserve">
+   <t t-name="HRDashboard">
+       <div class="oh_hr_dashboards" >
+           <div class="container-fluid o_hr_dashboard" >
+
+           </div>
+       </div>
+   </t>
+
+    <t t-name="HRDashboardProject">
+        <style>
+            body {
+            background-image: url("/mena_hr_dashboard/static/src/css/5486501.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            }
+        </style>
+
+    <div class="row col-md-12" id="rcorners_table">
+        <div class="col-md-5">
+        </div>
+        <div class="col-md-7" style="padding-top: 125px;" >
+            <div style="font-size: 40px;text-align:left;"><strong style="color:black;">JIC</strong></div>
+            <div style="font-size: 30px;text-align:left;"><strong style="color:black;">Human Resources Information</strong></div>
+            <div style="font-size: 30px;text-align:left;"><strong  style="color:black;">Management System</strong></div>
+            <div style="font-size: 15px;color:black;">Built on the latest HR functional requirements</div>
+            <div style="font-size: 15px;color:black;">and collaborative concepts, rooted in enhancing HR operations</div>
+        </div>
+
+    </div>
+    <div class="row" style="padding-top: 5px;text-align:center;">
+           <div class="col-md-2 col-sm-2" ></div>
+           <div class="col-md-2 col-sm-2" ></div>
+           <div class="col-md-2 col-sm-2" style="text-align:center;">
+               <div id="rcorners3">
+                   <div id="rcorners2" class="hr-jd">
+                      <div style="font-size: 40px;"><i style="color:blue;" class='fa fa-file-text'></i></div>
+                   </div>
+               </div>
+               <br/>
+               <div style="font-size: 15px;text-align:center;"><strong style="color:black;">Job Description</strong></div>
+                   <p style="font-size: 10px;color:black">Define a range of job descriptions to facilitate the talent management process</p>
+           </div>
+          <div class="col-md-2 col-sm-2" style="text-align:center;">
+               <div id="rcorners3">
+                   <div id="rcorners2" class="hr-employee">
+                      <div style="font-size: 40px;"><i style="color:blue;" class='fa fa-users'></i></div>
+                   </div>
+               </div>
+               <br/>
+               <div style="font-size: 15px;text-align:center;"><strong style="color:black;">Employees</strong></div>
+               <p style="font-size: 10px;color:black;">Enter and retrieve employees personal and financial information</p>
+           </div>
+           <div class="col-md-2 col-sm-2" style="text-align:center;">
+               <div id="rcorners3">
+                   <div id="rcorners2" class="hr-recruitment">
+                      <div style="font-size: 40px;"><i style="color:blue;" class="fa fa-search"></i></div>
+                   </div>
+               </div>
+               <br/>
+               <div style="font-size: 15px;text-align:center;"><strong style="color:black;">Recruitment</strong></div>
+               <p style="font-size: 10px;color:black;">Control of the
+                   departments is easier. Grouping the employees and assigning managers
+                   for smaller groups to simplify management</p>
+           </div>
+<!--        <div class="col-md-2 col-sm-2" style="text-align:center;">-->
+<!--               <div id="rcorners3">-->
+<!--                   <div id="rcorners2" class="hr-department">-->
+<!--                      <div style="font-size: 40px;"><i style="color:blue;" class='fa fa-file-text'></i></div>-->
+<!--                   </div>-->
+<!--               </div>-->
+<!--               <br/>-->
+<!--               <div style="font-size: 15px;text-align:center;"><strong style="color:black;">Departments</strong></div>-->
+<!--               <p style="font-size: 10px;color:black;">Control of the-->
+<!--                   departments is easier. Grouping the employees and assigning managers-->
+<!--                   for smaller groups to simplify management</p>-->
+<!--           </div>-->
+        <div class="col-md-2 col-sm-2" style="text-align:center;">
+               <div id="rcorners3">
+                   <div id="rcorners2" class="hr-payroll">
+                      <div style="font-size: 40px;"><i style="color:blue;" class='fa fa-inr'></i></div>
+                   </div>
+               </div>
+               <br/>
+               <div style="font-size: 15px;text-align:center;"><strong style="color:black;">Payroll</strong></div>
+                       <p style="font-size: 10px;color:black;">In order to simplify the work of the Human Resources department.</p>
+           </div>
+    </div>
+
+
+
+    </t>
+</template>

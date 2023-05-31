@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payslip_inherit" name="Payslip Inherit" inherit_id="hr_payroll_community.report_payslip">
+        <xpath expr="//div[@class='page']" position="replace">
+            <style>
+                .page{
+                    font-size: 13px;
+                }
+                .container{
+                    padding: 0px;
+                }
+
+                .payslip-table{
+                    border: 1px solid #3F72AF !important;
+                    //width: 100%;
+                }
+                .payslip-table td{
+                    border: 1px solid #3F72AF;
+                    text-align: center;
+                    padding: 3px;
+                    white-space: nowrap;
+                    color: #112D4E;
+                }
+                .payslip-table .tr-sub-head-td{
+                    text-align: left;
+                    font-weight: bold;
+                    background-color: #DBE2EF !important;
+                    padding-left: 3px;
+                }
+                .tr-sub-head-tr td{
+                    background-color: #DBE2EF !important;
+                    font-weight: bold !important;
+                }
+
+                .payslip-container .col{
+                    padding: 0px;
+                }
+                .left-align-td {
+                    text-align: left !important;
+                    padding-left: 3px !important;
+                }
+                .payslip-table-allowance {
+                    border-right: 0px !important;
+                }
+                .payslip-table-deduction {
+                    border-left: 0px !important;
+                }
+                .payslip-entitle-table{
+                    background-color: #DBE2EF !important;
+                }
+                .sum-td{
+                    background-color: #112D4E;
+                    color: #F9F7F7 !important;
+                }
+            </style>
+            <div class="page">
+
+                <t t-set="payslip_datas" t-value="o._get_payslip_report_data()"/>
+
+                <div class="oe_structure"/>
+                <t t-if="o.state != 'done'">
+                    <h2>Draft Payslip. Non Processed</h2>
+                </t>
+                <t t-else="">
+                    <h2>Pay Slip</h2>
+                </t>
+                <p t-field="o.name"/>
+                <div class="container">
+                    <table class="table payslip-table">
+                        <tbody>
+                            <tr>
+                                <td class="tr-sub-head-td">Employee Name</td>
+                                <td><t t-esc="payslip_datas.get('employee_name')"/></td>
+                                <td class="tr-sub-head-td">Joining Date</td>
+                                <td>
+                                    <t t-if="payslip_datas.get('joining_date')">
+                                        <t t-esc="payslip_datas.get('joining_date').strftime('%d %B, %Y')"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tr-sub-head-td">Employee ID</td>
+                                <td><t t-esc="payslip_datas.get('employee_code')"/></td>
+                                <td class="tr-sub-head-td">Total Days</td>
+                                <td><t t-esc="payslip_datas.get('total_days')"/></td>
+                            </tr>
+                            <tr>
+                                <td class="tr-sub-head-td">Designation</td>
+                                <td><t t-esc="payslip_datas.get('designation')"/></td>
+                                <td class="tr-sub-head-td">Loss of Pay</td>
+                                <td><t t-esc="payslip_datas.get('loss_of_pay')"/></td>
+                            </tr>
+                            <tr>
+                                <td class="tr-sub-head-td">Department</td>
+                                <td><t t-esc="payslip_datas.get('department')"/></td>
+                                <td class="tr-sub-head-td">Paid Days</td>
+                                <td><t t-esc="payslip_datas.get('paid_days')"/></td>
+                            </tr>
+                            <tr>
+                                <td class="tr-sub-head-td">Earned Leave</td>
+                                <td><t t-esc="payslip_datas.get('earned_leave')"/></td>
+                                <td class="tr-sub-head-td">Grade</td>
+                                <td><t t-esc="payslip_datas.get('grade')"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table payslip-table payslip-entitle-table">
+                        <tbody>
+                            <tr>
+                                <td colspan="6"><strong>Entitled Amount</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Basic Salary</strong></td>
+                                <td style="background-color: white;">
+                                    <span t-esc="payslip_datas.get('basic_salary')"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                </td>
+                                <td><strong>Gross Salary</strong></td>
+                                <td style="background-color: white;">
+                                    <span t-esc="payslip_datas.get('gross_salary')"
+                                          t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                </td>
+                                <td><strong>Net Salary</strong></td>
+                                <td style="background-color: white; font-size:15px;">
+                                    <strong>
+                                        <span t-esc="payslip_datas.get('net_salary')"
+                                              t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="payslip-container">
+                        <div class="row mx-0">
+                            <div class="col col-6">
+                                <table class="table payslip-table payslip-table-allowance">
+                                    <tbody>
+                                        <tr class="tr-sub-head-tr">
+                                            <td>Earnings</td>
+                                            <td>Amount</td>
+                                        </tr>
+                                        <t t-foreach="payslip_datas.get('earnings_list')" t-as="earn">
+                                            <tr>
+                                                <td class="left-align-td"><t t-esc="earn.get('name')"/></td>
+                                                <td>
+                                                    <span t-esc="earn.get('amount')"
+                                                        t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-foreach="[a for a in range(0, payslip_datas.get('dummy_earnings'))]" t-as="dummy_earn">
+                                            <tr>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td class="left-align-td sum-td">Total Earnings</td>
+                                            <td class="sum-td" style="font-weight: bold">
+                                                <span t-esc="payslip_datas.get('earnings_total_amount')"
+                                                    t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col col-6">
+                                <table class="table payslip-table payslip-table-deduction">
+                                    <tbody>
+                                        <tr class="tr-sub-head-tr">
+                                            <td>Deductions</td>
+                                            <td>Amount</td>
+                                        </tr>
+                                        <t t-foreach="payslip_datas.get('deductions_list')" t-as="ded">
+                                            <tr>
+                                                <td class="left-align-td"><t t-esc="ded.get('name')"/></td>
+                                                <td>
+                                                    <span t-esc="ded.get('amount')"
+                                                        t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <t t-foreach="[a for a in range(0, payslip_datas.get('dummy_deductions'))]" t-as="dummy_ded">
+                                            <tr>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td class="left-align-td sum-td">Total Deductions</td>
+                                            <td class="sum-td" style="font-weight: bold">
+                                                <span t-esc="payslip_datas.get('deductions_total_amount')"
+                                                    t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br></br>
+                <br></br>
+                <p class="text-right"><strong>Authorized signature</strong></p>
+            </div>
+        </xpath>
+    </template>
+</odoo>

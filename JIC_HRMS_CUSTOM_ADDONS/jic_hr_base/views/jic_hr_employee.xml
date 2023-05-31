@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="open_view_employee_list_my_inherit" model="ir.actions.act_window">
+            <field name="name">Employees Preferences</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="context">{'from_my_profile': True}</field>
+            <field name="view_id" ref="hr.view_employee_form"/>
+        </record>
+    <!--  Form view  -->
+    <record id="res_company_inherits_form" model="ir.ui.view">
+        <field name="name">res.company.inherits</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <field name="website" position="after">
+                <field name="enmfi"/>
+                <field name="kuwait_company"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_employee_sequence_form" model="ir.ui.view">
+        <field name="name">Employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']/h1[@class='d-flex']" position="before">
+                <label for="emp_code" string="Employee ID"/>
+                <h4><field name="emp_code" /></h4>
+            </xpath>
+<!--            <field name="category_ids" position="after">-->
+<!--                <label for="employer_contribution_perc"/>-->
+<!--                <h4><field name="emp_code" string="Employee ID" /></h4>-->
+<!--            </field>-->
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <field name="grade_id"/>
+            </xpath>
+            <field name="job_id" position="after">
+                <field name="exit_date"/>
+            </field>
+            <field name="company_id" position="after">
+                <field name="enmfi" invisible="1"/>
+                <field name="kuwait_company" invisible="1"/>
+            </field>
+<!--            karthick changes-->
+            <field name="mobile_phone" position="before">
+                <field name="employee_name_arabic"  attrs="{'invisible': [('enmfi','=',True)]}"/>
+            </field>
+            <field name="birthday" position="after">
+                <field name="age"/>
+            </field>
+            <group name="has_work_permit" position="replace">
+                <group string="Work Permit" name="has_work_permit" attrs="{'invisible': [('enmfi','=',True)]}">
+                    <field name="visa_no"/>
+                    <field name="permit_no"/>
+                    <field name="visa_expire"/>
+                    <field name="work_permit_expiration_date"/>
+                    <field name="has_work_permit"/>
+                </group>
+            </group>
+            <xpath expr="//field[@name='tz']" position="after">
+                <field name="probation_period"/>
+                <field name="notice_period"/>
+                <field name="opt_for_attendance_mail"/>
+                <field name="need_to_log_timesheet"/>
+                <field name="allow_overtime"/>
+            </xpath>
+            <xpath expr="//field[@name='address_id']" position="attributes">
+                <attribute name="domain">[('is_company', '=', 'company')]</attribute>
+            </xpath>
+<!--            <xpath expr="//field[@name='country_id']" position="after">-->
+<!--                <field name="religion"/>-->
+<!--                <field name="section"/>-->
+<!--                <field name="sponsor" attrs="{'invisible': [('enmfi','=',True)]}"/>-->
+<!--                <field name="sponsor_company_id" attrs="{'invisible': [('enmfi','=',True)]}"/>-->
+<!--            </xpath>-->
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page name="dependents" string="Dependents Details">
+                    <field name="employee_dependency_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="relationship"/>
+                            <field name="dob"/>
+                            <field name="nationality_id"/>
+                            <field name="telephone"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="emergency" string="Emergency Contact">
+                    <field name="employee_emergency_ids">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="relationship"/>
+                            <field name="number_1"/>
+                            <field name="number_2"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="qualification" string="Qualification Details">
+                    <field name="employee_qualification_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="subject_id"/>
+                            <field name="institution_id"/>
+                            <field name="university_id"/>
+                            <field name="year_of_passing"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <xpath expr="//page[@name='personal_information']" position="attributes">
+                <attribute name="string">Personal Information</attribute>
+            </xpath>
+            <field name="address_home_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+<!--            <field name="address_home_id" position="attributes">-->
+<!--                <attribute name="string">Permanent Address</attribute>-->
+<!--            </field>-->
+            <field name="private_email" position="replace">
+            </field>
+             <field name="phone" position="replace">
+            </field>
+            <xpath expr="//field[@name='study_school']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lang']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='identification_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='gender']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='birthday']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='age']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_permit_expiration_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='permit_no']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <field name="passport_id" position="after">
+                <field name="passport_expiry_date"/>
+                <field name="first_name_passport"/>
+                <field name="middle_name_passport"/>
+                <field name="last_name_passport"/>
+            </field>
+            <field name="address_home_id" position="after">
+                <label for="permanent_address" string="Permanent Address"/>
+                    <div class="o_address_format">
+                        <field name="permanent_address" placeholder="Permanent Address..." class="o_address_street"/>
+                        <field name="p_street2" placeholder="Street 2..." class="o_address_street"/>
+                        <field name="p_city" placeholder="City" class="o_address_city"/>
+                        <field name="p_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                        <field name="p_zip" placeholder="ZIP" class="o_address_zip"/>
+                        <field name="p_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                    </div>
+                <label for="present_address" string="Present Address"/>
+                    <div class="o_address_format">
+                        <field name="present_address" placeholder="Present Address..." class="o_address_street"/>
+                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                        <field name="city" placeholder="City" class="o_address_city"/>
+                        <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                        <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                    </div>
+
+                <field name="civil_id" attrs="{'invisible': [('enmfi','=',True)]}"/>
+                <field name="civil_expiry" attrs="{'invisible': [('enmfi','=',True)]}"/>
+                <field name="personal_contact_no"/>
+                <field name="personal_email_id"/>
+                <field name="gender"/>
+                <field name="birthday"/>
+                <field name="age"/>
+                <field name="father_name"/>
+                <field name="mother_name"/>
+              </field>
+<!--                          <xpath expr="//field[@name='present_address']" position="after">-->
+<!--&lt;!&ndash;                <field name="employee_bank_name"/>&ndash;&gt;-->
+<!--                <field name="civil_id" attrs="{'invisible': [('enmfi','=',True)]}"/>-->
+<!--                <field name="civil_expiry" attrs="{'invisible': [('enmfi','=',True)]}"/>-->
+<!--&lt;!&ndash;                <field name="passport_expiry_date"/>&ndash;&gt;-->
+<!--                <field name="work_permit_position" attrs="{'invisible': [('enmfi','=',True)]}"/>-->
+<!--                <field name="work_permit_salary" attrs="{'invisible': [('enmfi','=',True)]}"/>-->
+<!--                <field name="personal_contact_no"/>-->
+<!--                <field name="personal_email_id"/>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+    <record id="hr_employee_form_inherits" model="ir.ui.view">
+          <field name="name">Employee</field>
+          <field name="model">hr.employee</field>
+          <field name="inherit_id" ref="hr.view_employee_form"/>
+          <field name="arch" type="xml">
+              <notebook position="inside">
+                <page string="Salary Information" name="information">
+                    <group name="salary_info">
+                        <group name="salary" string="Earnings / Amount">
+                            <label for="wage"/>
+                            <div class="o_row" name="wage">
+                                <field name="wage" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="misc_allowance"/>
+                            <div class="o_row">
+                                <field name="misc_allowance" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="variable_inc"/>
+                            <div class="o_row">
+                                <field name="variable_inc" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="arrears"/>
+                            <div class="o_row">
+                                <field name="arrears" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="other_earnings"/>
+                            <div class="o_row">
+                                <field name="other_earnings" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="incentive"/>
+                            <div class="o_row">
+                                <field name="incentive" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="gmi_release"/>
+                            <div class="o_row">
+                                <field name="gmi_release" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                        </group>
+                       <group string="Deduction / Amount" name='allowances'>
+                            <label for="hra"/>
+                            <div class="o_row">
+                                <field name="hra" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="da"/>
+                            <div class="o_row">
+                                <field name="da" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="travel_allowance"/>
+                            <div class="o_row">
+
+                                <field name="travel_allowance" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="meal_allowance"/>
+                            <div class="o_row">
+
+                                <field name="meal_allowance" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="medical_allowance"/>
+                            <div class="o_row">
+
+                                <field name="medical_allowance" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                            <label for="other_allowance"/>
+                            <div class="o_row">
+
+                                <field name="other_allowance" widget="monetary" nolabel="1"/>
+                                <span>/ month</span>
+                            </div>
+                           <label for="employee_contribution_perc"/>
+                                <div class="o_row">
+                                    <field name="employee_contribution_perc" widget="monetary" nolabel="1"/>
+                                    <span>/ month</span>
+                                </div>
+                                <label for="employer_contribution_perc"/>
+                                <div class="o_row">
+                                    <field name="employer_contribution_perc" widget="monetary" nolabel="1"/>
+                                    <span>/ month</span>
+                                </div>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+              <notebook position="inside">
+                   <page string="Leave Information" name="information">
+                       <field name="employee_leave_details_ids" readonly="1" options="{'no_open': True,'no_create':True}"></field>
+                   </page>
+
+              </notebook>
+
+              <xpath expr="//field[@name='bank_account_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+              <field name="department_id" position="before">
+                <field name="esi" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                  <field name="wwf" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                  <field name="uan" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+              </field>
+              <field name="country_of_birth" position="after">
+                <field name="aadhar_number" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="pan" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+<!--                <field name="father_name" attrs="{'invisible': [('kuwait_company','=',True)]}"/>-->
+<!--                <field name="mother_name" attrs="{'invisible': [('kuwait_company','=',True)]}"/>-->
+            </field>
+               <field name="work_location_id" position="after">
+                <field name="date_of_promotions" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="date_of_increments" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="date_of_promotions" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="date_of_resignation" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="last_working_day" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="employee_bank_name" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="ifsc" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="bank_account_id" attrs="{'invisible': [('kuwait_company','=',True)]}"/>
+                <field name="emp_code_old"/>
+                <field name="date_of_joining"/>
+                <field name="service_period"/>
+                <field name="section"/>
+                <field name="salary_pay_mode"/>
+                 <field name="bank_iban"/>
+            </field>
+               <field name="permit_no" position="after">
+                <field name="work_permit_position"/>
+                <field name="work_permit_salary"/>
+            </field>
+          </field>
+      </record>
+
+    <!--  Search view  -->
+    <record id="hr_employee_sequence_search" model="ir.ui.view">
+        <field name="name">Employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="emp_code"/>
+                <field name="grade_id"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_employee_inherit_form" model="ir.ui.view">
+        <field name="name">inherit.hr.employee</field>
+         <field name="model">hr.employee</field>
+         <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="groups_id" eval="[(6, 0, [ref('employee_inherits.employee_rbac')])]"/>
+         <field name="arch" type="xml">
+             <xpath expr="//form" position="attributes">
+                <attribute name="create">false</attribute>
+                <attribute name="delete">false</attribute>
+            </xpath>
+         </field>
+    </record>
+
+    <!-- ==================== HR PUBLIC ==================== -->
+
+    <record model="ir.ui.view" id="hr_employee_public_inherit_form_view">
+        <field name="name">hr.public.form.view</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']" position="inside">
+                <h4>
+                    <field name="emp_code"/>
+                </h4>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <field name="grade_id"/>
+            </xpath>
+        </field>
+    </record>
+
+
+
+</odoo>

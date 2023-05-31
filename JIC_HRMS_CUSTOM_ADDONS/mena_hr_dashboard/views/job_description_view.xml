@@ -1,0 +1,55 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="view_job_description_tree">
+        <field name="name">job.description.tree</field>
+        <field name="model">job.description</field>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <tree string="Job Description">
+                <field name="employee_id"/>
+                <field name="skill_type_id"/>
+                <field name="skill_id"/>
+                <field name="skill_level_id"/>
+                <field name="level_progress"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_job_description_form">
+        <field name="name">job.description.form</field>
+        <field name="model">job.description</field>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <form string="Description">
+                <group>
+                    <group>
+                        <field name="employee_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                        <field name="skill_type_id"/>
+                        <field name="skill_id"/>
+                    </group>
+                    <group>
+                        <field name="skill_level_id"/>
+                        <field name="level_progress"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_job_description_data">
+        <field name="name">Job Description</field>
+        <field name="res_model">job.description</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+      <menuitem id="menu_job_description" name="Job Description" parent="hr.menu_human_resources_configuration" action="action_job_description_data"/>
+
+    <record id="action_model_res_users_inherit" model="ir.actions.server">
+        <field name="name">Bulk Employee Creation</field>
+        <field name="model_id" ref="base.model_res_users"/>
+       <field name="binding_model_id" ref="base.model_res_users" />
+        <field name="state">code</field>
+        <field name="code">action = records.employee_creation()</field>
+    </record>
+
+
+  </data>
+</odoo>

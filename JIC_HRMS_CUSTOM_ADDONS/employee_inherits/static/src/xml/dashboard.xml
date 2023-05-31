@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<template xml:space="preserve">
+   <t t-name="hedDashboard">
+       <div class="oh_dashboards" >
+           <div class="container-fluid o_pos_dashboard" >
+
+           </div>
+       </div>
+   </t>
+
+    <t t-name="DashboardProject">
+        <style>
+            body {
+            background-image: url("/mena_hr_dashboard/static/src/css/dashboard_cover.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            }
+        </style>
+       <div class="row" style="padding-top: 75px;text-align:center;">
+           <div class="col-md-1 col-sm-2" ></div>
+           <div class="col-md-1 col-sm-2" ></div>
+           <div class="col-md-2 col-sm-2" ></div>
+           <div class="col-md-2 col-sm-2" >
+               <div class="stat-widget-one">
+                   <div id="rcorners1" class="hr-dashboard">
+                      <div style="font-size: 20px;"><i style="color:red;" class="fa fa-user"/></div>
+                       <div style="font-size: 15px;"><strong style="color:black;">HR</strong></div>
+                       <p style="font-size: 8px;">Human Resource for modern companies
+                            All-in-one: Recruitments, Appraisal, Expenses,
+                            Leaves, Attendances, etc.</p>
+
+                   </div>
+               </div>
+           </div>
+           <div class="col-md-2 col-sm-2" >
+               <div class="stat-widget-one">
+                   <div id="rcorners1" class="emp-timesheet">
+                      <div style="font-size: 20px;"><i style="color:red;" class="fa fa-hourglass-start"></i></div>
+                       <div style="font-size: 15px;"><strong style="color:black;">Timesheet</strong></div>
+                       <p style="font-size: 8px;">It supports your own work flow.Task management, time-tracking, and weekly timesheets.</p>
+
+                   </div>
+               </div>
+           </div>
+           <div class="col-md-2 col-sm-2" >
+               <div class="stat-widget-one">
+                   <div id="rcorners1" class="emp-attendances">
+                      <div style="font-size: 20px;"><i style="color:red;" class='fa fa-address-book'></i></div>
+                       <div style="font-size: 15px;"><strong style="color:black;">Attendance</strong></div>
+                       <p style="font-size: 8px;">Keep track of the employee hours worked and sort by project, client, or tasks.</p>
+
+                   </div>
+               </div>
+           </div>
+           <div class="col-md-2 col-sm-2" >
+               <div class="stat-widget-one">
+                   <div id="rcorners1" class="emp-calender">
+                      <div style="font-size: 20px;"><i style="color:red;" class='fa fa-calendar'></i></div>
+                       <div style="font-size: 15px;"><strong style="color:black;">Calender</strong></div>
+                       <p style="font-size: 8px;">Conducting regular meetings and conferences is very important to strengthen the relationship with employees and clients.</p>
+
+                   </div>
+               </div>
+           </div>
+       </div>
+        <div class="row" style="padding-top: 75px;text-align:center;">
+           <div class="col-md-1 col-sm-2" ></div>
+           <div class="col-md-1 col-sm-2" ></div>
+           <div class="col-md-2 col-sm-2" ></div>
+           <div class="col-md-2 col-sm-2" >
+               <div class="stat-widget-one">
+                   <div id="rcorners1" class="emp-time-off">
+                      <div style="font-size: 20px;"><i style="color:red;" class='fa fa-history'></i></div>
+                       <div style="font-size: 15px;"><strong style="color:black;">Time Off</strong></div>
+                       <p style="font-size: 8px;">Manage employee leaves Keep track of all your employees vacations</p>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+    </t>
+</template>

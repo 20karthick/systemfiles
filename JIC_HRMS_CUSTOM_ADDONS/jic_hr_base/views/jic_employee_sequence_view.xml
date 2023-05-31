@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="jic_employee_sequence_no" model="ir.sequence">
+            <field name="name">Employee Sequence Id</field>
+            <field name="code">jic.employee.sequence</field>
+            <field name="prefix">JICIT</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+    </data>
+</odoo>

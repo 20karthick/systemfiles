@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payslip_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.inherit.hr</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll_community.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='input_line_ids']/tree/field[@name='contract_id']" position="after">
+                <field name="extra_input_ids" widget="many2many_tags" readonly="1" force_save="1"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button string="Send Mail" name="send_payslip_mail_to_employee" type="object" states="draft,verify,done" class="oe_highlight"/>
+                <button string="Cancel Payslip" name="action_payslip_cancel" type="object" groups="base.group_erp_manager"/>
+            </xpath>
+            <xpath expr="//div[@class='oe_title']" position="after">
+                <button icon="fa-refresh" name="button_trigger_employee_onchange" type="object" states="draft,verify" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Payslip Days">
+<!--                    <button string="Refresh" icon="fa-refresh" name="fetch_payslip_days"  type="object" states="draft,verify,done" class="oe_right oe_highlight"/>-->
+                    <field name="payslip_day_ids">
+                        <tree
+                                decoration-success="short_hrs==0"
+                                decoration-danger="status=='half_day_lop'"
+                                decoration-info="holiday==True"
+                                string="Payslip Days" editable="bottom" edit="false" delete="false" create="false">
+                            <field name="day" readonly="1"/>
+                            <field name="weekday"/>
+                            <field name="check_in"/>
+                            <field name="check_out"/>
+                            <field name="break_hrs" widget="float_time" optional="hide" sum="total"/>
+                            <field name="short_hrs" widget="float_time" sum="total"/>
+                            <field name="late_in" optional="hide" sum="total"/>
+                            <field name="early_out" optional="hide" sum="total"/>
+                            <field name="leave_hrs" widget="float_time" optional="hide" sum="total"/>
+                            <field name="grace_period" widget="float_time" optional="hide"/>
+                            <field name="net_hrs" widget="float_time" sum="total"/>
+                            <field name="legal_hrs" widget="float_time" sum="total"/>
+                            <field name="timesheet_hrs" widget="float_time" sum="total"/>
+                            <field name="overtime_hrs" widget="float_time" optional="hide" sum="total"/>
+                            <field name="holiday" optional="hide"/>
+                            <field name="time_short" sum="total"/>
+                            <field name="timesheet_short" sum="total"/>
+                            <field name="leave_status"/>
+                            <field name="amount" optional="hide" sum="total"/>
+                            <field name="excused" optional="hide"/>
+                            <field name="excused_by" optional="hide"/>
+                            <field name="status"/>
+                            <button name="button_excuse" string="Excuse" type="object"
+                                attrs="{'invisible':[('status','!=','half_day_lop')]}"/>
+                            <button name="button_revert" string="Revert" type="object"
+                                attrs="{'invisible':[('excused','=',False)]}" class="oe_highlight"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

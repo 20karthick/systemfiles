@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--  Form view  -->
+    <record id="hr_department_sequence_form" model="ir.ui.view">
+        <field name="name">Department</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="grace_period_in_attendance" widget="float_time"/>
+                <field name="max_allowed_exceptions_in_month"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_account_analytic_line_tree_inherit_timesheet" model="ir.ui.view">
+            <field name="name">account.analytic.line.tree.inherit.timesheet</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='date']" position="after">
+                        <field name="weekday" optional="show"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

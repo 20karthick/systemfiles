@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="hr_contract_inherit_form_view">
+        <field name="name">hr.contract.form.view</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='top_info_right']" position="after">
+               <group string="Probation">
+                    <field name="probation_period"/>
+                    <field name="probation_start_date" readonly="1"/>
+                    <field name="probation_end_date" readonly="1"/>
+                </group>
+                <group string="Notice Period">
+                    <field name="notice_period"/>
+                    <field name="notice_start_date" readonly="1"/>
+                    <field name="notice_end_date" readonly="1"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="payroll_extra_input_category_indemnity" model="hr.employee.extra.input.category">
+            <field name="name">Indemnity</field>
+            <field name="rule_id" ref="hr_rule_end_of_service_benefits"/>
+            <field name="restrict_from_user_request" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

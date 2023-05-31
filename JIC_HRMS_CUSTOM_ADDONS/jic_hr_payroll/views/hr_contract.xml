@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="contract_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.inherit.hr</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_contract_form_additional_allowance"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='allowances']" position="inside">
+                <label for="employee_contribution_perc" invisible="1"/>
+                <div class="o_row" invisible="1">
+                    <field name="employee_contribution_perc" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+                <label for="employer_contribution_perc" invisible="1"/>
+                <div class="o_row" invisible="1">
+                    <field name="employer_contribution_perc" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

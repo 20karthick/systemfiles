@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--  Form view  -->
+    <record id="res_company_inherit_form" model="ir.ui.view">
+        <field name="name">ResCompany</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Offer Letter">
+                    <group>
+                        <field name="section_1"/>
+                        <field name="section_2"/>
+                        <field name="section_3"/>
+                        <field name="section_4"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

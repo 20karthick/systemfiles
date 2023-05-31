@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<data>
+
+		<!-- Form View -->
+		<record id="bulk_extra_inputs_wiz" model="ir.ui.view">
+			<field name="name">bulk.extra.inputs.wiz.form</field>
+			<field name="model">bulk.extra.inputs.wiz</field>
+			<field name="arch" type="xml">
+				<form string="Bulk Update Payslip Inputs">
+					<group col="4">
+						<field name="date" />
+						<field name="input_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+						<field name="amount" />
+						<field name="note"/>
+						<field name="category_id"/>
+						<field name="department_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+					</group>
+					<group col="2">
+						<field name="employee_ids" widget="many2many_tags"/>
+					</group>
+					<footer>
+						<button
+							string="Confirm"
+							name="action_confirm"
+							type="object"
+							class="btn-primary"
+						/>
+						<button
+							string="Cancel"
+							class="btn-secondary"
+							special="cancel"
+						/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="act_bulk_extra_inputs_wiz" model="ir.actions.act_window">
+            <field name="name">Bulk Input Update</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bulk.extra.inputs.wiz</field>
+			<field name="target">new</field>
+            <field name="view_id" ref="bulk_extra_inputs_wiz"/>
+        </record>
+
+		<menuitem name="JIC Data Import"
+          	id="menu_administration"
+		  	parent="base.menu_administration"
+			action="act_jic_data_import_wiz_form"
+          	sequence="550"
+          	groups="base.group_erp_manager"/>
+
+    </data>
+</odoo>

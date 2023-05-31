@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="jic_regularization_request_sequence" model="ir.sequence">
+            <field name="name">Regularization Request</field>
+            <field name="code">jic.employee.regularization.request</field>
+            <field name="prefix">REGULARIZATION/</field>
+            <field name="padding">7</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+    </data>
+</odoo>

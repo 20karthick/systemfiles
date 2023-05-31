@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="email_template_employee_resignation" model="mail.template">
+            <field name="name">Separation Request: Send by email</field>
+            <field name="model_id" ref="jic_hr_employee_entry_exit.model_hr_employee_separation"/>
+            <field name="subject">Separation Request - {{object.employee_id.name}}</field>
+            <field name="email_from">{{ (object.company_id.partner_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ ctx.get('partner_to') }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="ctx.get('partner_to_name')"/>,
+                        <br/><br/>
+                        You have a new request (<t t-out="object.name"/>) for separation from <strong t-out="object.employee_id.name"/>.
+                        <br></br>
+                        <t t-if="ctx.get('act_type') == 'approve'">
+                            The request is validated and accepted by the line manager <t t-out="object.manager_id.name"/>.
+                            <br></br>
+                        </t>
+                        Please have a look and approve.
+                        <br/><br/>
+                        Reason for Separation :- <t t-out="object.reason"/>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_employee_offer_letter" model="mail.template">
+            <field name="name">Offer Letter: Send by email</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="subject">Offer Letter - {{object.partner_name}}</field>
+            <field name="email_from">{{ (object.company_id.partner_id.email_formatted or user.email_formatted) }}</field>
+            <field name="email_to">${object.email_from|safe}</field>
+            <field name="body_html" type="html">
+                <table style="background-color: white; border-collapse: collapse; margin-left: 20px;" width="590" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding: 0px 10px;" valign="top">
+                                <div style="font-size: 13px; margin: 0px; padding: 0px;">
+                                    Hello <strong><t t-esc="object.partner_name"/></strong>,
+                                    <p></p>
+                                    Warm Greetings!
+                                    <p></p>
+                                    We from the JIC family are pleased to extend the offer to you as per the details mentioned below.
+                                    <p></p>
+                                    <ul>
+                                        <li>Role: <strong><t t-esc="object.job_id.name"/></strong></li>
+                                        <li>Joining Location: <strong><t t-esc="object.work_location_id.name"/></strong></li>
+                                        <li>Date of Joining: <strong><t t-esc="object.availability.strftime('%d %B, %Y')"/></strong></li>
+                                    </ul>
+                                    Please go through the attached Offer Letter in detail to understand the key employment terms and conditions
+                                    which will assist you to make an informed choice regarding joining <t t-esc="object.company_id.name"/>.
+                                    <p></p>
+                                    Please communicate your acceptance by email, so we can organize the next set of formalities.
+                                    <p></p>
+                                    If you have any questions, you can call me on my direct line
+                                    <t t-esc="object.company_id.mobile"/> or
+                                    email at <t t-esc="object.company_id.email"/>.
+                                    <hr></hr>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+
+    </data>
+</odoo>

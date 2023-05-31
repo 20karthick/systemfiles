@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_qualification_tree" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.tree</field>
+        <field name="model">hr.employee.qualification</field>
+        <field name="arch" type="xml">
+            <tree string="Qualification">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_qualification_form" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.form</field>
+        <field name="model">hr.employee.qualification</field>
+        <field name="arch" type="xml">
+            <form string="Qualification">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="subject_id"/>
+                            <field name="year_of_passing"/>
+                        </group>
+                        <group>
+                            <field name="institution_id"/>
+                            <field name="university_id"/>
+                            <field name="doc_attachment_ids" widget="many2many_binary" class="oe_inline"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ======================= Qualification Subject ======================== -->
+
+    <record id="hr_employee_qualification_subject_tree" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.subject.tree</field>
+        <field name="model">hr.employee.qualification.subject</field>
+        <field name="arch" type="xml">
+            <tree string="Subjects">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_qualification_subject_form" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.subject.form</field>
+        <field name="model">hr.employee.qualification.subject</field>
+        <field name="arch" type="xml">
+            <form string="Qualification">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_qualification_subject_tree" model="ir.actions.act_window">
+        <field name="name">Qualification - Subjects</field>
+        <field name="res_model">hr.employee.qualification.subject</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No Subjects found. Let's start a new one!
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_hr_employee_qualification_subject"
+        action="act_hr_employee_qualification_subject_tree"
+        parent="hr.menu_human_resources_configuration"
+        groups="base.group_erp_manager"
+        sequence="100"
+    />
+
+    <!-- ======================= Qualification Institution ======================== -->
+
+    <record id="hr_employee_qualification_institution_tree" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.institution.tree</field>
+        <field name="model">hr.employee.qualification.institution</field>
+        <field name="arch" type="xml">
+            <tree string="Institution">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_qualification_institution_form" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.institution.form</field>
+        <field name="model">hr.employee.qualification.institution</field>
+        <field name="arch" type="xml">
+            <form string="Institutions">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_qualification_institution_tree" model="ir.actions.act_window">
+        <field name="name">Qualification - Institution</field>
+        <field name="res_model">hr.employee.qualification.institution</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No Institution found. Let's start a new one!
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_hr_employee_qualification_institution"
+        action="act_hr_employee_qualification_institution_tree"
+        parent="hr.menu_human_resources_configuration"
+        groups="base.group_erp_manager"
+        sequence="101"
+    />
+
+    <!-- ======================= Qualification University ======================== -->
+
+    <record id="hr_employee_qualification_university_tree" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.university.tree</field>
+        <field name="model">hr.employee.qualification.university</field>
+        <field name="arch" type="xml">
+            <tree string="University">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_qualification_university_form" model="ir.ui.view">
+        <field name="name">hr.employee.qualification.university.form</field>
+        <field name="model">hr.employee.qualification.university</field>
+        <field name="arch" type="xml">
+            <form string="University">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_qualification_university_tree" model="ir.actions.act_window">
+        <field name="name">Qualification - University</field>
+        <field name="res_model">hr.employee.qualification.university</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No University found. Let's start a new one!
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_hr_employee_qualification_university"
+        action="act_hr_employee_qualification_university_tree"
+        parent="hr.menu_human_resources_configuration"
+        groups="base.group_erp_manager"
+        sequence="102"
+    />
+
+</odoo>

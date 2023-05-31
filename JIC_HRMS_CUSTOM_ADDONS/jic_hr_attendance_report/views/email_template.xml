@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_employee_periodic_attendances" model="mail.template">
+            <field name="name">Attendance: Send by email</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="subject">Attendance Report - {{ctx.get('date_from', 'N/a')}} to {{ctx.get('date_to', 'N/a')}}</field>
+            <field name="email_from">{{ (object.company_id.partner_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.user_id.partner_id.id }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.name"/>,
+                        <br/><br/>
+                        Your attendance and time sheet summary for the period of <strong t-out="ctx.get('date_from').strftime('%d %b %Y')"/> to <strong t-out="ctx.get('date_to').strftime('%d %b %Y')"/>
+                        is here.
+                        <br></br>
+                        <br></br>
+                        Please have a look and connect with your manager or HR point of contact in case of any mismatches found.
+                        <br/><br/>
+                        <div style="margin: 0px; padding: 0px;">
+                            <table class="table table-sm table-striped" style="padding:0px; background-color: #FFE5B4; max-width:900px;">
+                                <thead style="background-color: #231955; color: white; border: 1px solid white;">
+                                    <tr style="border-bottom: 2px solid #dee2e6; text-align: center;">
+                                        <th colspan="3"><b><t t-out="object.name"/></b></th>
+                                        <th colspan="1"></th>
+                                        <th colspan="5"><b><t t-out="object.job_title"/></b></th>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #dee2e6; text-align: center;">
+                                        <th style="border: 1px solid white;">Date</th>
+                                        <th style="border: 1px solid white;">Weekday</th>
+                                        <th style="border: 1px solid white;">Check In</th>
+                                        <th style="border: 1px solid white;">Check Out</th>
+                                        <th style="border: 1px solid white;">Break Hrs</th>
+                                        <th style="border: 1px solid white;">Shortage Hrs</th>
+                                        <th style="border: 1px solid white;">Net Hrs</th>
+                                        <th style="border: 1px solid white;">Time Sheet Hrs</th>
+                                        <th style="border: 1px solid white;">Leave/Off Hrs</th>
+                                    </tr>
+                                </thead>
+                                <tdata>
+                                    <t t-foreach="ctx.get('date_list')" t-as="att_date">
+                                        <t t-foreach="ctx.get('attendance_lines')[att_date]" t-as="att_line">
+                                            <t t-if="att_line.get('date') == att_date and att_line.get('employee_id') == object.id">
+                                                <t t-if="att_line.get('holiday') == true">
+                                                    <t t-set="tr_style" t-value="'border: 1px solid #dee2e6; text-align: center;background-color: #D3CEDF;'"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-set="tr_style" t-value="'border: 1px solid #dee2e6; text-align: center;'"/>
+                                                </t>
+
+                                                <tr t-att-style="tr_style">
+                                                    <td style="border: 1px solid black;"><t t-esc="att_date.strftime('%d %b %Y')"/></td>
+                                                    <td style="border: 1px solid black;"><t t-esc="att_date.strftime('%A')"/></td>
+                                                    <td style="border: 1px solid black;"><t t-esc="att_line.get('in_time_str')"/></td>
+                                                    <td style="border: 1px solid black;"><t t-esc="att_line.get('out_time_str')"/></td>
+                                                    <td style="border: 1px solid black;"><t t-esc="att_line.get('break_time_str') or '0:0'"/></td>
+                                                    <td style="border: 1px solid black;color:red;"><t t-esc="att_line.get('shortage_hours_str') or '0:0'"/></td>
+                                                    <td style="border: 1px solid black; font-weight: bold; color: blue"><t t-esc="att_line.get('net_time_str') or '0:0'"/></td>
+                                                    <td style="border: 1px solid black;"><t t-esc="att_line.get('approved_timesheet')"/></td>
+                                                    <td style="border: 1px solid black;"><t t-esc="att_line.get('leave_hours_str')"/></td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </tdata>
+                            </table>
+                        </div>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+
+        <record id="email_template_employee_regularization" model="mail.template">
+            <field name="name">Regularization Request: Send by email</field>
+            <field name="model_id" ref="jic_hr_attendance_report.model_attendance_regular"/>
+            <field name="subject">Attendance Regularization Request - {{object.employee_id.name}}</field>
+            <field name="email_from">{{ (object.company_id.partner_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ ctx.get('partner_to') }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="ctx.get('partner_to_name')"/>,
+                        <br/><br/>
+                        You have a new request (<t t-out="object.name"/>) for attendance regularization from <strong t-out="object.employee_id.name"/>.
+                        <br></br>
+                        Please have a look and approve.
+                        <br/><br/>
+                        Category :- <t t-out="object.reg_category.type"/>
+                        <br/><br/>
+                        Reason :- <t t-out="object.reg_reason"/>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_employee_periodic_attendances_xlsx" model="mail.template">
+            <field name="name">Attendance Xlsx: Send by email</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="subject">Attendance Report - {{object.name}}</field>
+            <field name="email_from">{{ (object.company_id.partner_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.user_id.partner_id.id }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi <t t-out="object.name"/>,
+                        <br/><br/>
+                        Your attendance and time sheet summary for this month is here
+                        <br></br>
+                        <br></br>
+                        Please have a look and connect with your manager or HR point of contact in case of any mismatches found.
+                        <br/><br/>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+
+    </data>
+</odoo>

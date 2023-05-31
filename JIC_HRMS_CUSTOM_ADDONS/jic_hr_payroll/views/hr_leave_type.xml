@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_leave_type_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.type.inherit.hr</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='allocation_validation']" position="before">
+                <group name="Validations" id="leave_validations">
+                    <h2>Validations</h2>
+                    <field name="paid_percentage"/>
+                    <field name="allow_during_probation"/>
+                    <field name="exclude_from_gratuity"/>
+                    <field name="exclude_from_vaccation"/>
+                    <field name="exclude_from_air_ticket"/>
+                    <field name="include_ess"/>
+                    <field name="mandatory_role_delegation"/>
+                    <field name="min_cuttoff_days_for_salary_advance"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

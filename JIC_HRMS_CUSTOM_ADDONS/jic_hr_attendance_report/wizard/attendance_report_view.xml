@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <!-- Attendance Wizard -->
+
+        <record id="view_hr_attendance_report_wizard" model="ir.ui.view">
+            <field name="name">view.hr.attendance.report.wizard</field>
+            <field name="model">hr.attendance.report.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Attendance Report Wizard">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="department_id"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+                        <field name="employee_id"/>
+                        <field name="debug"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_download" string="Download" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_hr_attendance_report_wizard" model="ir.actions.act_window">
+            <field name="name">Attendance Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.attendance.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                id="menu_jic_attendance_report_xlsx"
+                name="Attendance Report Xlsx"
+                action="action_hr_attendance_report_wizard"
+                parent="hr_attendance.menu_hr_attendance_report"
+                groups="hr_attendance.group_hr_attendance_user"
+                sequence="1"/>
+
+</odoo>

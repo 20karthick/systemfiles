@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_checklist_tree" model="ir.ui.view">
+        <field name="name">hr.employee.checklist.tree</field>
+        <field name="model">hr.employee.checklist</field>
+        <field name="arch" type="xml">
+            <tree string="Checklist">
+                <field name="name"/>
+                <field name="checklist_type_id"/>
+                <field name="type" readonly="1"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_checklist_form" model="ir.ui.view">
+        <field name="name">hr.employee.checklist.form</field>
+        <field name="model">hr.employee.checklist</field>
+        <field name="arch" type="xml">
+            <form string="Checklist">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="checklist_type_id"/>
+                        </group>
+                        <group>
+                            <field name="type" readonly="1"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_checklist_tree" model="ir.actions.act_window">
+        <field name="name">Employee Checklist</field>
+        <field name="res_model">hr.employee.checklist</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No checklist found. Let's start a new one!
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_hr_employee_checklist"
+        action="act_hr_employee_checklist_tree"
+        parent="menu_hr_employee_separation"
+        groups="base.group_erp_manager"
+        sequence="20"
+    />
+
+    <record id="hr_employee_checklist_type_tree" model="ir.ui.view">
+        <field name="name">hr.employee.checklist.type.tree</field>
+        <field name="model">hr.employee.checklist.type</field>
+        <field name="arch" type="xml">
+            <tree string="Checklist Type">
+                <field name="name"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_checklist_type_form" model="ir.ui.view">
+        <field name="name">hr.employee.checklist.type.form</field>
+        <field name="model">hr.employee.checklist.type</field>
+        <field name="arch" type="xml">
+            <form string="Checklist Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Settlements">
+                            <field name="settlement_conf_ids">
+                                <tree editable="bottom">
+                                    <field name="from_year"/>
+                                    <field name="to_year"/>
+                                    <field name="days"/>
+                                    <field name="paid_days"/>
+                                    <field name="pay_percentage"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_checklist_type_tree" model="ir.actions.act_window">
+        <field name="name">Checklist Type</field>
+        <field name="res_model">hr.employee.checklist.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No checklist types found. Let's start a new one!
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_hr_employee_checklist_type"
+        action="act_hr_employee_checklist_type_tree"
+        parent="menu_hr_employee_separation"
+        groups="base.group_erp_manager"
+        sequence="30"
+    />
+
+</odoo>

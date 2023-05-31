@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_timesheet_entry_attendance_user,hr.timesheet.entry,model_hr_timesheet_entry,hr_timesheet.group_hr_timesheet_user,1,1,1,1
+,,,,,,,
+access_hr_timesheet_approval_wizard,hr.timesheet.approval.wizard,model_hr_timesheet_approval_wizard,hr_timesheet.group_hr_timesheet_approver,1,1,1,1
+access_hr_timesheet_draft_wizard,hr.timesheet.draft.wizard,model_hr_timesheet_draft_wizard,hr_timesheet.group_hr_timesheet_approver,1,1,1,1
+access_hr_timesheet_submit_wizard,hr.timesheet.submit.wizard,model_hr_timesheet_submit_wizard,hr_timesheet.group_hr_timesheet_user,1,1,1,1

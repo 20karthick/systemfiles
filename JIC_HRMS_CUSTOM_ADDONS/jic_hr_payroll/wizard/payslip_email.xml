@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<data>
+
+		<!-- Form View -->
+		<record id="jic_send_email_payslips_form" model="ir.ui.view">
+			<field name="name">payslip.send.mail.wiz.form</field>
+			<field name="model">payslip.send.mail.wiz</field>
+			<field name="arch" type="xml">
+				<form string="Import">
+					<header>
+					</header>
+					<sheet>
+						<p>This will trigger sending payslips to selected employees. Once triggered cannot be reverted</p>
+						<footer>
+							<button
+								string="Send Payslips"
+								name="send_payslip_via_mail"
+								type="object"
+								class="btn-primary"
+							/>
+							<button
+								string="Cancel"
+								class="btn-secondary"
+								special="cancel"
+							/>
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="act_jic_send_payslip_email_form" model="ir.actions.act_window">
+            <field name="name">Email Payslip to Employees</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payslip.send.mail.wiz</field>
+            <field name="view_id" ref="jic_send_email_payslips_form"/>
+			<field name="target">new</field>
+            <field name="binding_model_id" ref="model_hr_payslip"/>
+            <field name="binding_view_types">list</field>
+        </record>
+
+    </data>
+</odoo>

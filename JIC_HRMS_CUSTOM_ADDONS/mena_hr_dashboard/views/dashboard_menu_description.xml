@@ -1,0 +1,42 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="view_dashboard_menu_description_tree">
+        <field name="name">dashboard.menu.description</field>
+        <field name="model">dashboard.menu.description</field>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <tree string="Menu List">
+                <field name="name"/>
+                <field name="menu_id"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_dashboard_menu_description_form">
+        <field name="name">dashboard.menu.description</field>
+        <field name="model">dashboard.menu.description</field>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <form string="Menu Description">
+                <group>
+                    <group>
+                        <field name="menu_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                        <field name="image"/>
+                    </group>
+                    <group>
+                        <field name="name" invisible="1"/>
+                    </group>
+                </group>
+                <field name="description"/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_dashboard_menu_description_data">
+        <field name="name">Dashboard Menu Description</field>
+        <field name="res_model">dashboard.menu.description</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+      <menuitem id="menu_dashboard_menu_description" name="Dashboard Menu Description" parent="base.menu_users" action="action_dashboard_menu_description_data"/>
+  </data>
+</odoo>

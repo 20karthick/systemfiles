@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="jic_resignation_request_sequence" model="ir.sequence">
+            <field name="name">Resignation Request</field>
+            <field name="code">jic.employee.resignation.request</field>
+            <field name="prefix">RESIGN/</field>
+            <field name="padding">7</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+    </data>
+</odoo>

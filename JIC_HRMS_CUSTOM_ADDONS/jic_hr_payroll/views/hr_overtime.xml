@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================== INPUT REQUEST ========================= -->
+
+    <record id="hr_employee_overtime_request_tree" model="ir.ui.view">
+        <field name="name">hr.overtime.request.tree</field>
+        <field name="model">hr.overtime.request</field>
+        <field name="arch" type="xml">
+            <tree string="Overtime Request"
+                decoration-danger="state=='rejected'"
+                decoration-info="state=='validated'"
+                decoration-success="state=='approved'"
+                decoration-muted="state=='requested'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="amount" widget="float_time"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_overtime_request_form" model="ir.ui.view">
+        <field name="name">hr.overtime.request.form</field>
+        <field name="model">hr.overtime.request</field>
+        <field name="arch" type="xml">
+            <form string="Overtime Request">
+                <header>
+                <button name="action_validate" states="requested" string="Validate" type="object" class="oe_highlight"/>
+                <button name="action_approve" states="validated" string="Approve" type="object" class="oe_highlight"/>
+                <button name="action_reject" states="requested,validated" string="Reject" type="object" class="oe_highlight"/>
+                <button name="action_draft" states="rejected,approved" string="Reset" type="object"/>
+                <field name="state" widget="statusbar" statusbar_visible="requested,validated,approved,executed,rejected"/>
+                </header>
+                <sheet>
+                    <label for="name" class="oe_edit_only" readonly="1"/>
+                    <h1><field name="name"/></h1>
+                    <label for="employee_id" class="oe_edit_only"/>
+                    <h2><field name="employee_id" readonly="1" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/></h2>
+                    <label for="overtime_type" class="oe_edit_only"/>
+                    <h3><field name="overtime_type"/></h3>
+                    <group col="4" string="Overtime Details">
+                        <field name="overtime_date"/>
+                        <field name="amount" widget="float_time"/>
+                        <field name="contract_hours" widget="float_time"/>
+                        <field name="worked_hours" widget="float_time"/>
+                        <field name="overtime_hours" widget="float_time"/>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                        <field name="user_id" invisible="1"/>
+                    </group>
+                    <group col="4" string="Employee Details">
+                        <field name="date"/>
+                        <field name="manager_id"/>
+                        <field name="department_id"/>
+                        <field name="hr_responsible_id"/>
+                    </group>
+                    <group col="4" string="Payslip Details">
+                        <field name="rule_id"/>
+                        <field name="payslip_id" readonly="1"/>
+                        <field name="payslip_status" readonly="1"/>
+                        <field name="settlement_amount" widget="monetary"/>
+                        <field name="company_id"/>
+                        <field name="company_currency_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_employee_overtime_request_search" model="ir.ui.view">
+        <field name="name">ir.actions.actions.search</field>
+        <field name="model">hr.overtime.request</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+                <field name="name" string="Request"/>
+                <field name="employee_id"/>
+                <field name="state"/>
+                <filter string="Approved" name="approved" help="Approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Validated" name="validated" help="Validated" domain="[('state', '=', 'validated')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'executed')]"/>
+                <filter string="Requested" name="requested" domain="[('state', '=', 'requested')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Status" name="state" context="{'group_by': 'state'}"/>
+                </group>
+                <searchpanel>
+                    <field name="company_id" icon="fa-building" enable_counters="1"/>
+                    <field name="department_id" icon="fa-users" enable_counters="1"/>
+                    <field name="state" icon="fa-tasks" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_overtime_request_tree" model="ir.actions.act_window">
+        <field name="name">Overtime Request</field>
+        <field name="res_model">hr.overtime.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_requested': True}</field>
+        <field name="search_view_id" ref="hr_employee_overtime_request_search"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No requests found. Let's start a new one!
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_hr_employee_overtime_request"
+        action="act_hr_employee_overtime_request_tree"
+        parent="menu_hr_payslip_input_main"
+        sequence="15"
+    />
+
+</odoo>

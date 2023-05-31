@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============ Checklist Type =============== -->
+
+        <record id="hr_checklist_type_resignation" model="hr.employee.checklist.type">
+            <field name="name">Resignation</field>
+            <field name="type">resignation</field>
+            <field name="settlement_conf_ids" eval="[Command.clear(),
+                          (0,0,{'from_year': 3 ,'to_year': 5, 'days': 15, 'paid_days': 26, 'pay_percentage': 50}),
+                          (0,0,{'from_year': 5 ,'to_year': 10, 'days': 30, 'paid_days': 30, 'pay_percentage': 66.66}),
+                          (0,0,{'from_year': 10 ,'to_year': 100, 'days': 30, 'paid_days': 30, 'pay_percentage': 100}),
+                          ]"/>
+        </record>
+
+        <record id="hr_checklist_type_fired" model="hr.employee.checklist.type">
+            <field name="name">Termination</field>
+            <field name="type">fired</field>
+            <field name="settlement_conf_ids" eval="[Command.clear(),
+                          (0,0,{'from_year': 0 ,'to_year': 5, 'days': 15, 'paid_days': 26, 'pay_percentage': 100}),
+                          (0,0,{'from_year': 5 ,'to_year': 100, 'days': 30, 'paid_days': 30, 'pay_percentage': 100}),
+                          ]"/>
+        </record>
+
+        <record id="hr_checklist_type_absconding" model="hr.employee.checklist.type">
+            <field name="name">Absconding</field>
+            <field name="type">absconding</field>
+        </record>
+
+        <record id="hr_checklist_type_death" model="hr.employee.checklist.type">
+            <field name="name">Death</field>
+            <field name="type">death</field>
+        </record>
+
+        <record id="hr_checklist_type_article41a" model="hr.employee.checklist.type">
+            <field name="name">Article 41a</field>
+            <field name="type">article41a</field>
+        </record>
+
+        <record id="hr_checklist_type_retirement" model="hr.employee.checklist.type">
+            <field name="name">Retirement</field>
+            <field name="type">retirement</field>
+        </record>
+
+        <record id="hr_checklist_type_onboarding" model="hr.employee.checklist.type">
+            <field name="name">Onboarding</field>
+            <field name="type">onboarding</field>
+        </record>
+
+    </data>
+</odoo>
