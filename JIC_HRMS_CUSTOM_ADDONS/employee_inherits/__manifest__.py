@@ -20,7 +20,8 @@
              'views/header_footer.xml',
              'views/employee_leave_creation_view.xml',
              'security/employee_security.xml',
-             'security/ir.model.access.csv'],
+             'security/ir.model.access.csv',
+             'data/attendance_rules.xml'],
 
     'assets': {
         'web.assets_backend': [

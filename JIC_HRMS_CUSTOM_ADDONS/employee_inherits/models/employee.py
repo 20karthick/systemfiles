@@ -1,4 +1,4 @@
-from odoo import api, fields, models, tools, _
+from odoo import api, fields, models, tools, exceptions, _
 from odoo.osv import expression
 from odoo.http import request
 from odoo.exceptions import UserError, ValidationError
@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 import base64
 from io import BytesIO
 import xlrd
+from odoo.tools import format_datetime
 
 
 class HrContractInherits(models.Model):
@@ -72,12 +73,12 @@ class InheritsHrAttendance(models.Model):
     emp_code = fields.Char('Employee ID', compute='_compute_employee_code')
     # first_half_status = fields.Char('First Half Status', size=20)
     # second_half_status = fields.Char('Second Half Status', size=20)
-    first_half_status = fields.Selection([('present', 'PRESENT'),
+    first_half_status = fields.Selection([('present', 'PRESENT'), ('absent', 'ABSENT'),
                                ('week_off', 'WEEK OFF'),
                                ('casual_leave', 'CASUAL LEAVE'),
                                ('sick_leave', 'SICK LEAVE'),
                                ('lop', 'LOP')], string="First Half Status")
-    second_half_status = fields.Selection([('present', 'PRESENT'),
+    second_half_status = fields.Selection([('present', 'PRESENT'), ('absent', 'ABSENT'),
                                ('week_off', 'WEEK OFF'),
                                ('casual_leave', 'CASUAL LEAVE'),
                                ('sick_leave', 'SICK LEAVE'),
@@ -86,6 +87,90 @@ class InheritsHrAttendance(models.Model):
          ('approve', 'Approved'),
          ('rejected', 'Rejected')], default='draft', string="Status")
     remarks = fields.Char('Remarks', size=20)
+
+    check_in_date = fields.Date('Check In Date', compute='_compute_date')
+    check_out_date = fields.Date('Check Out Date')
+
+    @api.constrains('check_in', 'check_out', 'employee_id')
+    def _check_validity(self):
+        """ Verifies the validity of the attendance record compared to the others from the same employee.
+            For the same employee we must have :
+                * maximum 1 "open" attendance record (without check_out)
+                * no overlapping time slices with previous employee records
+        """
+        for attendance in self:
+            # we take the latest attendance before our check_in time and check it doesn't overlap with ours
+            last_attendance_before_check_in = self.env['hr.attendance'].search([
+                ('employee_id', '=', attendance.employee_id.id),
+                ('check_in', '<=', attendance.check_in),
+                ('id', '!=', attendance.id),
+            ], order='check_in desc', limit=1)
+            # if last_attendance_before_check_in and last_attendance_before_check_in.check_out and last_attendance_before_check_in.check_out > attendance.check_in:
+            #     raise exceptions.ValidationError(
+            #         _("Cannot create new attendance record for %(empl_name)s, the employee was already checked in on %(datetime)s") % {
+            #             'empl_name': attendance.employee_id.name,
+            #             'datetime': format_datetime(self.env, attendance.check_in, dt_format=False),
+            #         })
+
+            if not attendance.check_out:
+                # if our attendance is "open" (no check_out), we verify there is no other "open" attendance
+                no_check_out_attendances = self.env['hr.attendance'].search([
+                    ('employee_id', '=', attendance.employee_id.id),
+                    ('check_out', '=', False),
+                    ('id', '!=', attendance.id),
+                ], order='check_in desc', limit=1)
+                # if no_check_out_attendances:
+                #     raise exceptions.ValidationError(
+                #         _("Cannot create new attendance record for %(empl_name)s, the employee hasn't checked out since %(datetime)s") % {
+                #             'empl_name': attendance.employee_id.name,
+                #             'datetime': format_datetime(self.env, no_check_out_attendances.check_in, dt_format=False),
+                #         })
+            else:
+                # we verify that the latest attendance with check_in time before our check_out time
+                # is the same as the one before our check_in time computed before, otherwise it overlaps
+                last_attendance_before_check_out = self.env['hr.attendance'].search([
+                    ('employee_id', '=', attendance.employee_id.id),
+                    ('check_in', '<', attendance.check_out),
+                    ('id', '!=', attendance.id),
+                ], order='check_in desc', limit=1)
+                # if last_attendance_before_check_out and last_attendance_before_check_in != last_attendance_before_check_out:
+                #     raise exceptions.ValidationError(
+                #         _("Cannot create new attendance record for %(empl_name)s, the employee was already checked in on %(datetime)s") % {
+                #             'empl_name': attendance.employee_id.name,
+                #             'datetime': format_datetime(self.env, last_attendance_before_check_out.check_in,
+                #                                         dt_format=False),
+                #         })
+    @api.model
+    def _attendance_rules_checked(self):
+        date = datetime(2023, 6, 1, 0, 0, 0)
+        for rec in self.env['hr.attendance'].search([]):
+            if rec.check_in_date < fields.Date.today():
+                if rec.check_in >= date:
+                    checkin = (datetime.strptime(str(rec.check_in), '%Y-%m-%d %H:%M:%S') + relativedelta(hours=5, minutes=30)).strftime('%Y-%m-%d %H:%M:%S')
+                    check_in = datetime.strptime(checkin, '%Y-%m-%d %H:%M:%S')
+                    check_in_time = check_in.time()
+                    if str(check_in_time) >= '10:01:00':
+                        rec.first_half_status = 'lop'
+                if rec.check_out == False and rec.check_in >= date and rec.second_half_status != 'absent':
+                    rec.second_half_status = 'absent'
+                    out_time = time(3, 00)
+                    check_out = datetime.combine(rec.check_in_date, out_time)
+                    check_out = (datetime.strptime(str(check_out), '%Y-%m-%d %H:%M:%S') + relativedelta(hours=5,minutes=30)).strftime('%Y-%m-%d %H:%M:%S')
+                    if rec.first_half_status != 'lop':
+                        rec.check_out = check_out
+
+
+
+
+
+    def _compute_date(self):
+        for rec in self:
+            if rec.check_in:
+                check_in_date = datetime.strptime(str(rec.check_in), '%Y-%m-%d %H:%M:%S').date()
+                rec.check_in_date = check_in_date
+            if rec.check_out:
+                check_out_date = datetime.strptime(str(rec.check_out), '%Y-%m-%d %H:%M:%S').date()
+                rec.check_out_date = check_out_date
 
     def _compute_employee_code(self):
         for emp in self:

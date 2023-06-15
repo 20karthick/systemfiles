@@ -207,10 +207,12 @@
              <field name="employee_id" position="before">
                 <field name="emp_code"/>
             </field>
-            <field name="check_in" position="before">
+            <field name="check_in" position="after">
+                <field name="check_in_date" invisible="1"/>
                 <field name="first_half_status"/>
             </field>
-            <field name="check_out" position="before">
+            <field name="check_out" position="after">
+<!--                <field name="check_out_date"/>-->
                 <field name="second_half_status"/>
             </field>
             <field name="check_out" position="after">
@@ -230,14 +232,13 @@
             <field name="employee_id" position="before">
                 <field name="emp_code"/>
             </field>
-            <field name="check_in" position="before">
+            <field name="check_in" position="after">
+                <field name="check_in_date" invisible="1"/>
                 <field name="first_half_status"/>
             </field>
-            <field name="check_out" position="before">
-                <field name="second_half_status"/>
-            </field>
             <field name="check_out" position="after">
-                <field name="status"/>
+                <field name="second_half_status"/>
+                <field name="status" invisible="1"/>
                 <field name="remarks"/>
             </field>
         </field>

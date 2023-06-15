@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+	<record id="cron_attendance_rule" model="ir.cron">
+		<field name="name">Attendance Rules</field>
+		<field eval="True" name="active"/>
+		<field name="user_id" ref="base.user_admin"/>
+		<field name="interval_number">10</field>
+		<field name="interval_type">minutes</field>
+		<field name="numbercall">-1</field>
+		<field name="model_id" ref="employee_inherits.model_hr_attendance"/>
+		<field name="state">code</field>
+		<field name="code">model._attendance_rules_checked()</field>
+	</record>
+</odoo>

@@ -24,6 +24,9 @@ import sys
 import datetime
 import logging
 import binascii
+from operator import itemgetter
+from itertools import groupby
+import datetime as dt
 
 from . import zklib
 from .zkconst import *
@@ -54,14 +57,30 @@ class ZkMachine(models.Model):
     address_id = fields.Many2one('res.partner', string='Working Address')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id.id)
 
+
+    def _group_attendance(self, attendance):
+        date = datetime(2023, 6, 1, 0, 0, 0)
+        g_list = []
+        js_list = []
+        # att_list = [(att.user_id, att.timestamp.date(), att.timestamp.time()) for att in attendance if att.timestamp >= date]
+        att_list = [(att.user_id, att.timestamp.date(), att.timestamp.time()) for att in attendance]
+        att_list.sort(key=itemgetter(0))
+        att_group = groupby(att_list, itemgetter(0))
+        for k, g in att_group:
+            g_list.append(list(g))
+        if g_list:
+            for j in g_list:
+                j.sort(key=itemgetter(1))
+                js_group = groupby(j, itemgetter(1))
+                for k, g in js_group:
+                    js_list.append(list(g))
+        return js_list
+
     def device_connect(self, zk):
-        print("LLLLLLLLLLLLL", zk)
         try:
-            print("22222222222222222222")
             conn = zk.connect()
             return conn
         except:
-            print("{{{{{{{{{{{{{{{{{{{{{{{")
             return False
     
     def clear_attendance(self):
@@ -75,7 +94,6 @@ class ZkMachine(models.Model):
                 except NameError:
                     raise UserError(_("Please install it with 'pip3 install pyzk'."))
                 conn = self.device_connect(zk)
-                print("<<<<<<<<<<<<<<<",conn)
                 if conn:
                     conn.enable_device()
                     clear_data = zk.get_attendance()
@@ -125,6 +143,7 @@ class ZkMachine(models.Model):
         _logger.info("++++++++++++Cron Executed++++++++++++++++++++++")
         zk_attendance = self.env['zk.machine.attendance']
         att_obj = self.env['hr.attendance']
+        date = datetime(2023, 6, 1, 0, 0, 0)
         for info in self:
             machine_ip = info.name
             zk_port = info.port_no
@@ -146,64 +165,100 @@ class ZkMachine(models.Model):
                     attendance = False
                 if attendance:
                     for each in attendance:
+                        # if each.timestamp >= date:
                         atten_time = each.timestamp
                         atten_time = datetime.strptime(atten_time.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
-                        local_tz = pytz.timezone(
-                            self.env.user.partner_id.tz or 'GMT')
+                        local_tz = pytz.timezone(self.env.user.partner_id.tz or 'GMT')
+                        print("UUUUUUUUUUUUUUU",local_tz, self.env.user.partner_id)
                         local_dt = local_tz.localize(atten_time, is_dst=None)
                         utc_dt = local_dt.astimezone(pytz.utc)
                         utc_dt = utc_dt.strftime("%Y-%m-%d %H:%M:%S")
-                        atten_time = datetime.strptime(
-                            utc_dt, "%Y-%m-%d %H:%M:%S")
+                        atten_time = datetime.strptime(utc_dt, "%Y-%m-%d %H:%M:%S")
                         atten_time = fields.Datetime.to_string(atten_time)
-                        if user:
-                            for uid in user:
-                                if uid.user_id == each.user_id:
-                                    get_user_id = self.env['hr.employee'].search(
-                                        [('device_id', '=', each.user_id)])
-                                    if get_user_id:
-                                        duplicate_atten_ids = zk_attendance.search(
-                                            [('device_id', '=', each.user_id), ('punching_time', '=', atten_time)])
-                                        if duplicate_atten_ids:
-                                            continue
-                                        else:
-                                            zk_attendance.create({'employee_id': get_user_id.id,
-                                                                  'device_id': each.user_id,
-                                                                  'attendance_type': str(each.status),
-                                                                  'punch_type': str(each.punch),
-                                                                  'punching_time': atten_time,
-                                                                  'address_id': info.address_id.id})
-                                            att_var = att_obj.search([('employee_id', '=', get_user_id.id),
-                                                                      ('check_out', '=', False)])
-                                            print('ddfcd1111111111', str(each.status))
-                                            if each.punch == 0: #check-in
-                                                if not att_var:
-                                                    att_obj.create({'employee_id': get_user_id.id,
-                                                                    'check_in': atten_time})
-                                            if each.punch == 1: #check-out
-                                                if len(att_var) == 1:
-                                                    att_var.write({'check_out': atten_time})
-                                                else:
-                                                    att_var1 = att_obj.search([('employee_id', '=', get_user_id.id)])
-                                                    if att_var1:
-                                                        att_var1[-1].write({'check_out': atten_time})
+                        # if user:
+                        #     for uid in user:
+                        #         if uid.user_id == each.user_id:
+                        get_user_id = self.env['hr.employee'].search([('device_id', '=', each.user_id)])
+                        if get_user_id:
+                            duplicate_atten_ids = zk_attendance.search(
+                                [('device_id', '=', each.user_id), ('punching_time', '=', atten_time)])
+                            if duplicate_atten_ids:
+                                continue
+                            else:
+                                zk_attendance.create({'employee_id': get_user_id.id,
+                                                      'device_id': each.user_id,
+                                                      'attendance_type': str(each.status),
+                                                      'punch_type': str(each.punch),
+                                                      'punching_time': atten_time,
+                                                      'address_id': info.address_id.id})
+                        # else:
+                        #     print('ddfcd', str(each.status))
+                        #     employee = self.env['hr.employee'].create(
+                        #         {'device_id': each.user_id, 'name': uid.name})
+                        #     zk_attendance.create({'employee_id': employee.id,
+                        #                           'device_id': each.user_id,
+                        #                           'attendance_type': str(each.status),
+                        #                           'punch_type': str(each.punch),
+                        #                           'punching_time': atten_time,
+                        #                           'address_id': info.address_id.id})
 
-                                    else:
-                                        print('ddfcd222222222222222', str(each.status))
-                                        print('user', uid.name)
-                                        employee = self.env['hr.employee'].create(
-                                            {'device_id': each.user_id, 'name': uid.name})
-                                        zk_attendance.create({'employee_id': employee.id,
-                                                              'device_id': each.user_id,
-                                                              'attendance_type': str(each.status),
-                                                              'punch_type': str(each.punch),
-                                                              'punching_time': atten_time,
-                                                              'address_id': info.address_id.id})
-                                        att_obj.create({'employee_id': employee.id,
-                                                        'check_in': atten_time})
-                                else:
-                                    pass
+
                     # zk.enableDevice()
+                    att_list = self._group_attendance(attendance)
+                    for att in att_list:
+                        if len(att) == 1:
+                            device_emp_id = att[0][0]
+                            min_ts = datetime.combine(att[0][1], att[0][2])
+                            # min time zone start
+                            min_ts = datetime.strptime(min_ts.strftime('%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
+                            local_tz = pytz.timezone(self.env.user.partner_id.tz or 'GMT')
+                            local_dt = local_tz.localize(min_ts, is_dst=None)
+                            utc_dt = local_dt.astimezone(pytz.utc)
+                            utc_dt = utc_dt.strftime("%Y-%m-%d %H:%M:%S")
+                            min_ts = datetime.strptime(utc_dt, "%Y-%m-%d %H:%M:%S")
+                            user_id = self.env['hr.employee'].search([('device_id', '=', device_emp_id)])
+                            if user_id:
+                                duplicate_atten_ids = att_obj.search([('employee_id', '=', user_id.id), ('check_in', '=', min_ts)])
+                                if duplicate_atten_ids:
+                                    continue
+                                else:
+                                    att_obj.create({'employee_id': user_id.id, 'check_in': min_ts, 'first_half_status': 'present'})
+                        else:
+                            device_emp_id = att[0][0]
+                            user_id = self.env['hr.employee'].search(
+                                [('device_id', '=', device_emp_id)])
+                            min_att = min(att, key=itemgetter(2))
+                            max_att = max(att, key=itemgetter(2))
+                            min_ts = datetime.combine(min_att[1], min_att[2])
+                            max_ts = datetime.combine(max_att[1], max_att[2])
+                            # min time zone start
+                            min_ts = datetime.strptime(min_ts.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+                            local_tz = pytz.timezone(self.env.user.partner_id.tz or 'GMT')
+                            local_dt = local_tz.localize(min_ts, is_dst=None)
+                            utc_dt = local_dt.astimezone(pytz.utc)
+                            utc_dt = utc_dt.strftime("%Y-%m-%d %H:%M:%S")
+                            min_ts = datetime.strptime(utc_dt, "%Y-%m-%d %H:%M:%S")
+                            # min time zone end
+
+                            # max time zone start
+                            max_ts = datetime.strptime(max_ts.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+                            local_tz = pytz.timezone(self.env.user.partner_id.tz or 'GMT')
+                            local_dt = local_tz.localize(max_ts, is_dst=None)
+                            utc_dt = local_dt.astimezone(pytz.utc)
+                            utc_dt = utc_dt.strftime("%Y-%m-%d %H:%M:%S")
+                            max_ts = datetime.strptime(utc_dt, "%Y-%m-%d %H:%M:%S")
+                            # max time zone end
+                            if user_id:
+                                duplicate_atten_ids = att_obj.search([('employee_id', '=', user_id.id), ('check_in', '=', min_ts)])
+                                write_atten_ids = att_obj.search([('employee_id', '=', user_id.id), ('check_in', '=', min_ts), ('check_out', '=', False)])
+                                if write_atten_ids:
+                                    write_atten_ids.write({'check_out': max_ts, 'second_half_status': 'present'})
+                                if duplicate_atten_ids:
+                                    continue
+                                else:
+                                    att_obj.create({'employee_id': user_id.id, 'check_in': min_ts,
+                                                    'first_half_status': 'present', 'check_out': max_ts, 'second_half_status': 'present'})
+
                     conn.disconnect
                     return True
                 else:
